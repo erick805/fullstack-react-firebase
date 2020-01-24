@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import "./App.css";
+import Home from "./components/Home";
 
 function App() {
   return (
-    <Fragment className="App">
-      <h1>Open Trivia Quiz!</h1>
+    <Fragment>
+      <Home />
     </Fragment>
   );
 }
