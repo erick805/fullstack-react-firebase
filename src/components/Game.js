@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Question from "./Question";
 import { loadQuestions } from "../utilities/questionsHelper";
+import HUD from "./HUD";
 export default class Game extends Component {
   constructor(props) {
     super(props);
@@ -8,7 +9,8 @@ export default class Game extends Component {
       questions: null,
       currentQuestion: null,
       loading: true,
-      score: 0
+      score: 0,
+      questionNumber: 0
     };
   }
 
@@ -44,15 +46,17 @@ export default class Game extends Component {
       questions: remainingQuestions,
       currentQuestion,
       loading: false,
-      score: (prevState.score += bonus)
+      score: (prevState.score += bonus),
+      questionNumber: prevState.questionNumber + 1
     }));
   };
 
   render() {
-    const { currentQuestion, loading } = this.state;
+    const { currentQuestion, loading, score, questionNumber } = this.state;
     return (
       <>
         {loading && <div id="loader" />}
+        <HUD score={score} questionNumber={questionNumber} />
         {!loading && currentQuestion && (
           <Question
             question={currentQuestion}
