@@ -15,7 +15,11 @@ export default class Game extends Component {
     try {
       const questions = await loadQuestions();
 
-      this.setState({ questions, currentQuestion: questions[0] });
+      this.setState({
+        questions,
+        currentQuestion: questions[0],
+        loading: false
+      });
     } catch (err) {
       console.error(err);
     }
@@ -26,7 +30,7 @@ export default class Game extends Component {
     return (
       <>
         {loading && <div id="loader" />}
-        {currentQuestion && <Question question={currentQuestion} />}
+        {!loading && currentQuestion && <Question question={currentQuestion} />}
       </>
     );
   }
