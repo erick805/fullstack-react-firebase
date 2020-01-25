@@ -121,3 +121,32 @@ h2 {
     transform: rotate(360deg);
   }
 }
+
+/* HUD */
+
+#hud {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hud-prefix {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.hud-main-text {
+  text-align: center;
+}
+
+#progress-bar {
+  width: 20rem;
+  height: 4rem;
+  border: 0.3rem solid #53a3e9;
+  margin-top: 1.5rem;
+}
+
+#progress-bar-full {
+  height: 3.4rem;
+  background-color: #53a3e9;
+  width: 0%;
+}
