@@ -1,14 +1,17 @@
-import React from "react";
+import React, { Component } from "react";
 import Question from "./Question";
 
-export default function Game() {
-  const dummyQuestions = {
-    question: "What's the best programming language?!",
-    answerChoices: ["JavaScript", "Java", "C#", "Swift"]
-  };
-  return (
-    <>
-      <Question question={dummyQuestions} />
-    </>
-  );
+const dummyQuestions = {
+  question: "What's the best programming language?!",
+  answerChoices: ["JavaScript", "Java", "C#", "Swift"]
+};
+
+export default class Game extends Component {
+  render() {
+    return (
+      <>
+        <Question question={dummyQuestions} />
+      </>
+    );
+  }
 }
