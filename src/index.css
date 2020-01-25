@@ -94,6 +94,14 @@ h2 {
   width: 100%;
 }
 
+.correct {
+  background-color: #46d367;
+}
+
+.incorrect {
+  background-color: #e63749;
+}
+
 /* Loader */
 
 #loader {
