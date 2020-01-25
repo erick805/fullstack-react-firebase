@@ -28,7 +28,7 @@ export default class Game extends Component {
     }
   }
 
-  changeQuestion() {
+  changeQuestion = () => {
     // get random index of question
     const randomQuestionIndex = Math.floor(
       Math.random() * this.state.questions.length
@@ -44,14 +44,19 @@ export default class Game extends Component {
       currentQuestion,
       loading: false
     });
-  }
+  };
 
   render() {
     const { currentQuestion, loading } = this.state;
     return (
       <>
         {loading && <div id="loader" />}
-        {!loading && currentQuestion && <Question question={currentQuestion} />}
+        {!loading && currentQuestion && (
+          <Question
+            question={currentQuestion}
+            changeQuestion={this.changeQuestion}
+          />
+        )}
       </>
     );
   }
