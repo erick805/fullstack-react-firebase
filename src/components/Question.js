@@ -19,7 +19,7 @@ export default function Question({ question, changeQuestion }) {
     setTimeout(() => {
       setSelectedAnswer(null);
       setAnswering(false);
-      changeQuestion();
+      changeQuestion(bonus);
     }, 1000);
   };
 
