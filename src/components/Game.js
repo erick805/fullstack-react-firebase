@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Question from "./Question";
 import { loadQuestions } from "../utilities/questionsHelper";
 import HUD from "./HUD";
+import SaveScoreForm from "./SaveScoreForm";
 export default class Game extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +11,8 @@ export default class Game extends Component {
       currentQuestion: null,
       loading: true,
       score: 0,
-      questionNumber: 0
+      questionNumber: 0,
+      done: false
     };
   }
 
@@ -32,14 +34,17 @@ export default class Game extends Component {
   }
 
   changeQuestion = (bonus = 0) => {
+    const { questions } = this.state;
+
+    if (questions.length === 0) {
+      return this.setState({ done: true });
+    }
     // get random index of question
-    const randomQuestionIndex = Math.floor(
-      Math.random() * this.state.questions.length
-    );
+    const randomQuestionIndex = Math.floor(Math.random() * questions.length);
     // set current question to the question at random index
-    const currentQuestion = this.state.questions[randomQuestionIndex];
+    const currentQuestion = questions[randomQuestionIndex];
     // remove question from questions going forward
-    const remainingQuestions = [...this.state.questions];
+    const remainingQuestions = [...questions];
     remainingQuestions.splice(randomQuestionIndex, 1);
     // update the state to reflect changes
     this.setState(prevState => ({
@@ -52,11 +57,17 @@ export default class Game extends Component {
   };
 
   render() {
-    const { currentQuestion, loading, score, questionNumber } = this.state;
+    const {
+      currentQuestion,
+      loading,
+      score,
+      questionNumber,
+      done
+    } = this.state;
     return (
       <>
-        {loading && <div id="loader" />}
-        {!loading && currentQuestion && (
+        {loading && !done && <div id="loader" />}
+        {!done && !loading && currentQuestion && (
           <>
             <HUD score={score} questionNumber={questionNumber} />
             <Question
@@ -65,6 +76,8 @@ export default class Game extends Component {
             />
           </>
         )}
+
+        {done && <SaveScoreForm score={score} />}
       </>
     );
   }
