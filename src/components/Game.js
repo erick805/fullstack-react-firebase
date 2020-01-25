@@ -37,7 +37,10 @@ export default class Game extends Component {
     const { questions } = this.state;
 
     if (questions.length === 0) {
-      return this.setState({ done: true });
+      return this.setState(prevState => ({
+        done: true,
+        score: prevState.score + bonus
+      }));
     }
     // get random index of question
     const randomQuestionIndex = Math.floor(Math.random() * questions.length);
