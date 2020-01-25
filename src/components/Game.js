@@ -56,12 +56,14 @@ export default class Game extends Component {
     return (
       <>
         {loading && <div id="loader" />}
-        <HUD score={score} questionNumber={questionNumber} />
         {!loading && currentQuestion && (
-          <Question
-            question={currentQuestion}
-            changeQuestion={this.changeQuestion}
-          />
+          <>
+            <HUD score={score} questionNumber={questionNumber} />
+            <Question
+              question={currentQuestion}
+              changeQuestion={this.changeQuestion}
+            />
+          </>
         )}
       </>
     );
