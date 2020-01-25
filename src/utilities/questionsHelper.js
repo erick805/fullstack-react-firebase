@@ -1,5 +1,10 @@
-export const loadQuestions = async () => {
-  const url = `https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple`;
+export const loadQuestions = async (
+  amount = 10,
+  category = 9,
+  difficulty = "easy",
+  type = "multiple"
+) => {
+  const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=${type}`;
   try {
     const res = await fetch(url);
     const { results } = await res.json();
