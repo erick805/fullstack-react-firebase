@@ -6,7 +6,8 @@ export default class Game extends Component {
     super(props);
     this.state = {
       questions: null,
-      currentQuestion: null
+      currentQuestion: null,
+      loading: true
     };
   }
 
@@ -21,11 +22,11 @@ export default class Game extends Component {
   }
 
   render() {
+    const { currentQuestion, loading } = this.state;
     return (
       <>
-        {this.state.currentQuestion && (
-          <Question question={this.state.currentQuestion} />
-        )}
+        {loading && <div id="loader" />}
+        {currentQuestion && <Question question={currentQuestion} />}
       </>
     );
   }
