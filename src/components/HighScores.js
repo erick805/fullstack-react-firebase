@@ -7,7 +7,6 @@ export default function HighScores() {
   const firebase = useFirebase();
 
   useEffect(() => {
-    console.log("getting scores");
     firebase.scores().once("value", snapshot => {
       const data = snapshot.val();
       const sortedScores = formatScoreData(data);
