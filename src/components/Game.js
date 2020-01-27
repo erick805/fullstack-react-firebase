@@ -1,91 +1,80 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Question from "./Question";
 import { loadQuestions } from "../utilities/questionsHelper";
 import HUD from "./HUD";
 import SaveScoreForm from "./SaveScoreForm";
-export default class Game extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      questions: null,
-      currentQuestion: null,
-      loading: true,
-      score: 0,
-      questionNumber: 0,
-      done: false
-    };
-  }
 
-  async componentDidMount() {
-    try {
-      const questions = await loadQuestions();
+export default function Game({ history }) {
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [done, setDone] = useState(false);
+  const [score, setScore] = useState(0);
+  const [questionNumber, setQuestionNumber] = useState(0);
 
-      this.setState(
-        {
-          questions
-        },
-        () => {
-          this.changeQuestion();
-        }
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  useEffect(() => {
+    loadQuestions()
+      .then(questions => setQuestions(questions))
+      .catch(err => console.error(err));
+  }, []);
 
-  scoreSaved = () => {
-    this.props.history.push("/");
+  const scoreSaved = () => {
+    history.push("/");
   };
 
-  changeQuestion = (bonus = 0) => {
-    const { questions } = this.state;
+  const changeQuestion = useCallback(
+    (bonus = 0) => {
+      if (questions.length === 0) {
+        setDone(true);
+        return setScore(score + bonus);
+      }
+      // get random index of question
+      const randomQuestionIndex = Math.floor(Math.random() * questions.length);
+      // set current question to the question at random index
+      const currentQuestion = questions[randomQuestionIndex];
+      // remove question from questions going forward
+      const remainingQuestions = [...questions];
+      remainingQuestions.splice(randomQuestionIndex, 1);
 
-    if (questions.length === 0) {
-      return this.setState(prevState => ({
-        done: true,
-        score: prevState.score + bonus
-      }));
-    }
-    // get random index of question
-    const randomQuestionIndex = Math.floor(Math.random() * questions.length);
-    // set current question to the question at random index
-    const currentQuestion = questions[randomQuestionIndex];
-    // remove question from questions going forward
-    const remainingQuestions = [...questions];
-    remainingQuestions.splice(randomQuestionIndex, 1);
-    // update the state to reflect changes
-    this.setState(prevState => ({
-      questions: remainingQuestions,
-      currentQuestion,
-      loading: false,
-      score: (prevState.score += bonus),
-      questionNumber: prevState.questionNumber + 1
-    }));
-  };
-
-  render() {
-    const {
-      currentQuestion,
-      loading,
-      score,
+      // update the state to reflect changes
+      setQuestions(remainingQuestions);
+      setCurrentQuestion(currentQuestion);
+      setLoading(false);
+      setScore(score + bonus);
+      setQuestionNumber(questionNumber + 1);
+    },
+    [
+      questions,
       questionNumber,
-      done
-    } = this.state;
-    return (
-      <>
-        {loading && !done && <div id="loader" />}
-        {!done && !loading && currentQuestion && (
-          <>
-            <HUD score={score} questionNumber={questionNumber} />
-            <Question
-              question={currentQuestion}
-              changeQuestion={this.changeQuestion}
-            />
-          </>
-        )}
+      setQuestions,
+      setQuestionNumber,
+      setCurrentQuestion,
+      setLoading,
+      score
+    ]
+  );
 
-        {done && <SaveScoreForm score={score} scoreSaved={this.scoreSaved} />}
-      </>
-    );
-  }
+  useEffect(() => {
+    console.log("changing questions");
+    if (!currentQuestion && questions.length) {
+      changeQuestion();
+    }
+  }, [currentQuestion, questions, changeQuestion]);
+
+  return (
+    <>
+      {loading && !done && <div id="loader" />}
+      {!done && !loading && currentQuestion && (
+        <>
+          <HUD score={score} questionNumber={questionNumber} />
+          <Question
+            question={currentQuestion}
+            changeQuestion={changeQuestion}
+          />
+        </>
+      )}
+
+      {done && <SaveScoreForm score={score} scoreSaved={scoreSaved} />}
+    </>
+  );
 }
