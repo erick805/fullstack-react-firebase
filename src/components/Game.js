@@ -55,7 +55,6 @@ export default function Game({ history }) {
   );
 
   useEffect(() => {
-    console.log("changing questions");
     if (!currentQuestion && questions.length) {
       changeQuestion();
     }
